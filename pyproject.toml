@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "fds-py"
+version = "0.1.0"
+description = ""
+authors = ["Saikat Karmakar"]
+license = "MIT" # "LGPL-3.0, GPL-3.0"
+readme = "README.md"
+packages = [{include = "fds"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8,^3.11"
+eth-ape = "*"
+ape-alchemy = "*"
+ape-solidity = "*"
+ape-foundry = "*"
+ape-etherscan = "*"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
