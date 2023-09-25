@@ -14,6 +14,7 @@ ape-alchemy = "*"
 ape-solidity = "*"
 ape-foundry = "*"
 ape-etherscan = "*"
+pyscaffold = "^4.5"
 
 
 

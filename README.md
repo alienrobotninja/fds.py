@@ -1,5 +1,5 @@
 # fds.py
-Fair Data Society Python SDK
+[Fair Data Society](https://github.com/fairDataSociety/fds.js) Python SDK
 
 ## Dependencies
 ```bash
