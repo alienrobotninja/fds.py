@@ -15,6 +15,7 @@ ape-solidity = "*"
 ape-foundry = "*"
 ape-etherscan = "*"
 pyscaffold = "^4.5"
+cryptography = "^41.0.4"
 
 
 
