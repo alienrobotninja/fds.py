@@ -20,8 +20,8 @@ handles crypto
 
 import json
 from typing import Dict
-from ape.api.accounts import Account
 
+from ape.api.accounts import Account
 from fds_crypto import Crypto
 
 # from web3 import Account
@@ -41,26 +41,39 @@ class Wallet:
 
     def generate(self, password):
         account = Account.create()
-        wallet = {
-            "address": account.address.lower(),
-            "publicKey": Crypto().private_to_public_key(account._private_key),
-            "privateKey": account._private_key,
-        }
+        wallet = WalletClass(
+            {
+                "address": account.address.lower(),
+                "publicKey": Crypto.private_to_public_key(account._private_key),
+                "privateKey": account._private_key,
+            }
+        )
         self.wallet = wallet
         self.wallet_v3 = Account.encrypt(account.privateKey, password)
         # * https://stackoverflow.com/questions/43380042/purpose-of-return-self-python
         return self
 
     def from_json(self, wallet_json, password):
-        account = Account.decrypt(wallet_json, password)
-        wallet = {
-            "address": account.address.lower(),
-            "publicKey": Crypto().private_to_public_key(account._private_key),
-            "privateKey": account._private_key,
-        }
-        return wallet
+        try:
+            account = Account.decrypt(wallet_json, password)
+            wallet = WalletClass(
+                {
+                    "address": account.address.lower(),
+                    "publicKey": Crypto.private_to_public_key(account._private_key),
+                    "privateKey": account._private_key,
+                }
+            )
+            return wallet
+        except ValueError as e:
+            if str(e) == "Key derivation failed - possibly wrong passphrase":
+                return False
+            else:
+                raise e
 
     def encrypt(self, private_key, password):
-        wallet_v3 = Account.encrypt(private_key, password)
-        wallet_json = json.dumps(wallet_v3)
-        return wallet_json
+        try:
+            wallet_v3 = Account.encrypt(private_key, password)
+            wallet_json = json.dumps(wallet_v3)
+            return wallet_json
+        except Exception as e:
+            raise e

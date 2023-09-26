@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-import "./ENS.sol";
+import "./interfaces/ENS.sol";
 
 /**
  * The ENS registry contract.
@@ -12,7 +12,7 @@ contract ENSRegistry is ENS {
         uint64 ttl;
     }
 
-    mapping (bytes32 => Record) records;
+    mapping(bytes32 => Record) records;
 
     // Permits modifications only by the owner of the specified node.
     modifier only_owner(bytes32 node) {
@@ -43,7 +43,11 @@ contract ENSRegistry is ENS {
      * @param label The hash of the label specifying the subnode.
      * @param owner The address of the new owner.
      */
-    function setSubnodeOwner(bytes32 node, bytes32 label, address owner) external only_owner(node) {
+    function setSubnodeOwner(
+        bytes32 node,
+        bytes32 label,
+        address owner
+    ) external only_owner(node) {
         bytes32 subnode = keccak256(abi.encodePacked(node, label));
         emit NewOwner(node, label, owner);
         records[subnode].owner = owner;
@@ -54,8 +58,11 @@ contract ENSRegistry is ENS {
      * @param node The node to update.
      * @param resolver The address of the resolver.
      */
-    function setResolver(bytes32 node, address resolver) external only_owner(node) {
-        emit NewResolver(node, resolver);   
+    function setResolver(
+        bytes32 node,
+        address resolver
+    ) external only_owner(node) {
+        emit NewResolver(node, resolver);
         records[node].resolver = resolver;
     }
 
@@ -95,5 +102,4 @@ contract ENSRegistry is ENS {
     function ttl(bytes32 node) external view returns (uint64) {
         return records[node].ttl;
     }
-
 }

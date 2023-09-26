@@ -13,3 +13,8 @@ ethereum:
     transaction_acceptance_timeout: 180 # 3 Minutes
   mainnet:
     transaction_acceptance_timeout: 180
+
+
+config_override:
+  solidity:
+    compiler_version: 0.5.16, 0.5.0, 0.8.0
