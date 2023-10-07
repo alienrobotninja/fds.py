@@ -1,6 +1,13 @@
 import ape
 import pytest
 
+from fds.fds_wallet import Wallet
+
+
+@pytest.fixture
+def test_wallet():
+    return Wallet()
+
 
 @pytest.fixture(autouse=True)
 def setenviron(monkeypatch):

@@ -18,6 +18,8 @@ along with the FairDataSociety library. If not, see <http:www.gnu.org/licenses/>
 handles crypto
 """
 import codecs
+import hashlib
+from binascii import hexlify, unhexlify
 from os import urandom
 
 from cryptography.hazmat.backends import default_backend
@@ -46,31 +48,66 @@ class Crypto:
         return pk.public_key.to_hex()
 
     @staticmethod
-    def calculate_shared_secret(private_key, recipient_public_key):
-        # Remove "0x" prefix if present
-        private_key = bytes.fromhex(private_key.replace("0x", ""))
-        recipient_public_key = bytes.fromhex(recipient_public_key.replace("0x", ""))
-        # print(recipient_public_key)
+    def calculate_shared_secret(private_key_hex, recipient_public_key_hex):
+        # Remove '0x' prefix and convert hex to bytes
+        private_key_bytes = unhexlify(private_key_hex[2:])
+        recipient_public_key_bytes = unhexlify(recipient_public_key_hex[2:])
 
-        recipient_public_key = serialization.load_pem_public_key(
-            recipient_public_key, backend=default_backend()
+        # Make sure the private key is 32 bytes (256 bits) long
+        if len(private_key_bytes) != 32:
+            raise ValueError("Private key must be a 32 byte hex string")
+
+        # Make sure the public key is 64 bytes (512 bits) long
+        if len(recipient_public_key_bytes) != 64:
+            raise ValueError("Public key must be a 64 byte hex string")
+
+        # Load the private key
+        private_key = ec.derive_private_key(
+            int.from_bytes(private_key_bytes, byteorder="big"),
+            ec.SECP256K1(),
+            default_backend(),
         )
-        print(recipient_public_key)
-        shared_key = private_key.exchange(ec.ECDH(), recipient_public_key)
-        return shared_key
+
+        # Load the recipient's public key
+        recipient_public_key = ec.EllipticCurvePublicNumbers(
+            int.from_bytes(recipient_public_key_bytes[:32], byteorder="big"),
+            int.from_bytes(recipient_public_key_bytes[32:], byteorder="big"),
+            ec.SECP256K1(),
+        ).public_key(default_backend())
+
+        # Calculate the shared secret
+        shared_secret = private_key.exchange(ec.ECDH(), recipient_public_key)
+
+        # Return the shared secret as a hex string
+        return shared_secret.hex()
 
     @staticmethod
     def encrypt_string(string, password, iv):
-        cipher = Cipher(
-            algorithms.AES(password), modes.CTR(iv), backend=default_backend()
-        )
+        # Convert hex to bytes
+        # iv = unhexlify(iv)
+        string = string.encode("utf-8")
+        # Hash the password to create a 32-byte key
+        key = hashlib.sha256(password).digest()
+
+        cipher = Cipher(algorithms.AES(key), modes.CTR(iv), backend=default_backend())
         encryptor = cipher.encryptor()
-        return encryptor.update(string.encode("utf-8")) + encryptor.finalize()
+        encrypted = encryptor.update(string) + encryptor.finalize()
+
+        # Return the encrypted string as a hex string
+        return hexlify(encrypted).decode("utf-8")
 
     @staticmethod
-    def decrypt_string(string, password, iv):
-        cipher = Cipher(
-            algorithms.AES(password), modes.CTR(iv), backend=default_backend()
-        )
+    def decrypt_string(encrypted_hex, password, iv):
+        # Convert hex to bytes
+
+        # iv = unhexlify(iv)
+        encrypted = unhexlify(encrypted_hex)
+        # Hash the password to create a 32-byte key
+        key = hashlib.sha256(password).digest()
+
+        cipher = Cipher(algorithms.AES(key), modes.CTR(iv), backend=default_backend())
         decryptor = cipher.decryptor()
-        return (decryptor.update(string) + decryptor.finalize()).decode("utf-8")
+        decrypted = decryptor.update(encrypted) + decryptor.finalize()
+
+        # Return the decrypted string as a utf-8 string
+        return decrypted.decode("utf-8")

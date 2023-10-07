@@ -1,8 +1,6 @@
-import pytest
 from eth_utils import keccak
 
 from fds.fds_crypto import Crypto
-from fds.fds_wallet import Wallet
 
 
 def test_public_key_derivation():
@@ -40,20 +38,22 @@ def test_calculate_shared_secret():
     shared_secret = crypto.calculate_shared_secret(private_key1, recipient_public_key1)
 
     # Assert that the shared_secret is not empty (it should be a bytes-like object)
+    # print(shared_secret)
     assert shared_secret
 
 
-# def test_encrypt_and_decrypt_string():
-#     crypto = Crypto()
-#     string_to_encrypt = "Hello, World!"
-#     password = b"supersecretpass"  # Should be bytes
-#     iv = crypto.generate_random_iv()
+def test_encrypt_and_decrypt_string():
+    crypto = Crypto()
+    string_to_encrypt = "Hello, World!"
+    password = b"supersecretpass"  # Should be bytes
+    iv = crypto.generate_random_iv()
 
-#     encrypted_string = crypto.encrypt_string(string_to_encrypt, password, iv)
-#     decrypted_string = crypto.decrypt_string(encrypted_string, password, iv)
+    encrypted_string = crypto.encrypt_string(string_to_encrypt, password, iv)
+    decrypted_string = crypto.decrypt_string(encrypted_string, password, iv)
 
-#     # Assert that the decrypted string matches the original string
-#     assert decrypted_string == string_to_encrypt
+    # Assert that the decrypted string matches the original string
+    assert decrypted_string == string_to_encrypt
+
 
 if __name__ == "__main__":
     test_calculate_shared_secret()
