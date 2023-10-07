@@ -21,10 +21,10 @@ handles crypto
 import json
 from typing import Dict
 
-from ape.api.accounts import Account
-from fds_crypto import Crypto
+from web3 import Account
 
-# from web3 import Account
+# from ape.api.accounts import Account
+from fds.fds_crypto import Crypto
 
 
 class WalletClass:
