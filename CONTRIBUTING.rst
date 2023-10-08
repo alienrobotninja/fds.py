@@ -27,7 +27,7 @@
 Contributing
 ============
 
-Welcome to ``fds_py`` contributor's guide.
+Welcome to ``fds.py-no-ape`` contributor's guide.
 
 This document focuses on getting any potential contributor familiarized
 with the development processes, but `other kinds of contributions`_ are also
@@ -46,7 +46,7 @@ guidelines.
 Issue Reports
 =============
 
-If you experience bugs or general issues with ``fds_py``, please have a look
+If you experience bugs or general issues with ``fds.py-no-ape``, please have a look
 on the `issue tracker`_. If you don't see anything useful there, please feel
 free to fire an issue report.
 
@@ -65,10 +65,10 @@ you help us to identify the root cause of the issue.
 Documentation Improvements
 ==========================
 
-You can help improve ``fds_py`` docs by making them more readable and coherent, or
+You can help improve ``fds.py-no-ape`` docs by making them more readable and coherent, or
 by adding missing information and correcting mistakes.
 
-``fds_py`` documentation uses Sphinx_ as its main documentation compiler.
+``fds.py-no-ape`` documentation uses Sphinx_ as its main documentation compiler.
 This means that the docs are kept in the same repository as the project code, and
 that any documentation update is done in the same way was a code contribution.
 
@@ -80,7 +80,7 @@ that any documentation update is done in the same way was a code contribution.
 
    .. tip::
       Please notice that the `GitHub web interface`_ provides a quick way of
-      propose changes in ``fds_py``'s files. While this mechanism can
+      propose changes in ``fds.py-no-ape``'s files. While this mechanism can
       be tricky for normal code contributions, it works perfectly fine for
       contributing to the docs, and can be quite handy.
 
@@ -131,8 +131,8 @@ This can easily be done via either |virtualenv|_::
 
 or Miniconda_::
 
-    conda create -n fds_py python=3 six virtualenv pytest pytest-cov
-    conda activate fds_py
+    conda create -n fds.py-no-ape python=3 six virtualenv pytest pytest-cov
+    conda activate fds.py-no-ape
 
 Clone the repository
 --------------------
@@ -142,8 +142,8 @@ Clone the repository
    page. This creates a copy of the code under your account on |the repository service|.
 #. Clone this copy to your local disk::
 
-    git clone git@github.com:YourLogin/fds_py.git
-    cd fds_py
+    git clone git@github.com:YourLogin/fds.py-no-ape.git
+    cd fds.py-no-ape
 
 #. You should run::
 
@@ -158,7 +158,7 @@ Clone the repository
     pip install pre-commit
     pre-commit install
 
-   ``fds_py`` comes with a lot of hooks configured to automatically help the
+   ``fds.py-no-ape`` comes with a lot of hooks configured to automatically help the
    developer to check the code being written.
 
 Implement your changes
@@ -285,7 +285,7 @@ Releases
 
 If you are part of the group of maintainers and have correct user permissions
 on PyPI_, the following steps can be used to release a new version for
-``fds_py``:
+``fds.py-no-ape``:
 
 #. Make sure all unit tests are successful.
 #. Tag the current commit on the main branch with a release tag, e.g., ``v1.2.3``.
@@ -314,8 +314,8 @@ on PyPI_, the following steps can be used to release a new version for
 .. |the repository service| replace:: GitHub
 .. |contribute button| replace:: "Create pull request"
 
-.. _repository: https://github.com/<USERNAME>/fds_py
-.. _issue tracker: https://github.com/<USERNAME>/fds_py/issues
+.. _repository: https://github.com/<USERNAME>/fds.py-no-ape
+.. _issue tracker: https://github.com/<USERNAME>/fds.py-no-ape/issues
 .. <-- end -->
 
 

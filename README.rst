@@ -1,49 +1,17 @@
-.. These are examples of badges you might want to add to your README:
-   please update the URLs accordingly
+# fds.py
+[Fair Data Society](https://github.com/fairDataSociety/fds.js) Python SDK
 
-    .. image:: https://api.cirrus-ci.com/github/<USER>/fds_py.svg?branch=main
-        :alt: Built Status
-        :target: https://cirrus-ci.com/github/<USER>/fds_py
-    .. image:: https://readthedocs.org/projects/fds_py/badge/?version=latest
-        :alt: ReadTheDocs
-        :target: https://fds_py.readthedocs.io/en/stable/
-    .. image:: https://img.shields.io/coveralls/github/<USER>/fds_py/main.svg
-        :alt: Coveralls
-        :target: https://coveralls.io/r/<USER>/fds_py
-    .. image:: https://img.shields.io/pypi/v/fds_py.svg
-        :alt: PyPI-Server
-        :target: https://pypi.org/project/fds_py/
-    .. image:: https://img.shields.io/conda/vn/conda-forge/fds_py.svg
-        :alt: Conda-Forge
-        :target: https://anaconda.org/conda-forge/fds_py
-    .. image:: https://pepy.tech/badge/fds_py/month
-        :alt: Monthly Downloads
-        :target: https://pepy.tech/project/fds_py
-    .. image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter
-        :alt: Twitter
-        :target: https://twitter.com/fds_py
+## Dependencies
+```bash
+Python >= 3.8
+pip
+poetry
+eth-ape
+```
 
-.. image:: https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold
-    :alt: Project generated with PyScaffold
-    :target: https://pyscaffold.org/
-
-|
-
-======
-fds_py
-======
-
-
-    Fair Data Society Python SDK
-
-
-A longer description of your project goes here...
-
-
-.. _pyscaffold-notes:
-
-Note
-====
-
-This project has been set up using PyScaffold 4.5. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
+## Setup
+1. Install [poetry](https://python-poetry.org/docs/)
+2. Then run the following command
+```bash
+poetry install
+```

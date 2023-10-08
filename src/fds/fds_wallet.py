@@ -44,12 +44,12 @@ class Wallet:
         wallet = WalletClass(
             {
                 "address": account.address.lower(),
-                "publicKey": Crypto.private_to_public_key(account._private_key),
+                "publicKey": Crypto().private_to_public_key(account._private_key),
                 "privateKey": account._private_key,
             }
         )
         self.wallet = wallet
-        self.wallet_v3 = Account.encrypt(account.privateKey, password)
+        self.wallet_v3 = Account.encrypt(account._private_key, password)
         # * https://stackoverflow.com/questions/43380042/purpose-of-return-self-python
         return self
 
@@ -59,7 +59,7 @@ class Wallet:
             wallet = WalletClass(
                 {
                     "address": account.address.lower(),
-                    "publicKey": Crypto.private_to_public_key(account._private_key),
+                    "publicKey": Crypto().private_to_public_key(account._private_key),
                     "privateKey": account._private_key,
                 }
             )
