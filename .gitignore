@@ -161,3 +161,4 @@ cython_debug/
 
 # custom 
 dev.sh
+__local__.json
