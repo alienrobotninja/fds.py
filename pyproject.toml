@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{ include = "fds" }]
 
 [tool.poetry.dependencies]
-python = ">=3.8,^3.11"
+python = "^3.8"          # ">=3.8,<3.12"
 eth-ape = "*"
 ape-alchemy = "*"
 ape-solidity = "*"
@@ -16,6 +16,8 @@ ape-foundry = "*"
 ape-etherscan = "*"
 pyscaffold = "^4.5"
 cryptography = "^41.0.4"
+# eth-tester = "^0.9.1b1"
+coverage-enable-subprocess = "^1.0"
 pytest-cov = "^4.1.0"
 
 

@@ -4,9 +4,16 @@ import pytest
 from fds.fds_wallet import Wallet
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def test_wallet():
     return Wallet()
+
+
+@pytest.fixture(autouse=True)
+def wallet_instance(test_wallet):
+    password = "test_password"
+    test_wallet.generate(password)
+    return test_wallet
 
 
 @pytest.fixture(autouse=True)
@@ -98,6 +105,16 @@ def geth_account(test_accounts):
 @pytest.fixture
 def geth_second_account(test_accounts):
     return test_accounts[7]
+
+
+@pytest.fixture(scope="session")
+def networks():
+    return ape.networks
+
+
+@pytest.fixture
+def ethereum(networks):
+    return networks.ethereum
 
 
 @pytest.fixture(autouse=True)
