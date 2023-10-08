@@ -35,9 +35,7 @@ def test_calculate_shared_secret(crypto_instance):
     private_key1 = "0x7cbb15a540c3954792bf3729f9b26c0242e745890332bcf2ffeaece345f9d141"
     recipient_public_key1 = "0x37f91e6ec022b55c08eca29f89e47f6f03ad1af35d3a7b2cacd1514c0c9e31c0358a181b3d50552440a9b1c7ea2942b94b178179a16798bcd7fc77b1cccff309"
 
-    shared_secret = crypto_instance.calculate_shared_secret(
-        private_key1, recipient_public_key1
-    )
+    shared_secret = crypto_instance.calculate_shared_secret(private_key1, recipient_public_key1)
 
     # Assert that the shared_secret is not empty (it should be a bytes-like object)
     # print(shared_secret)

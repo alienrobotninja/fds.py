@@ -10,111 +10,101 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-    linting:
-        runs-on: ubuntu-latest
+  linting:
+    runs-on: ubuntu-latest
 
-        steps:
-        - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-        - name: Setup Python
-          uses: actions/setup-python@v4
-          with:
-              python-version: "3.10"
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-        - name: Install Dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip install .[lint]
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[lint]
 
-        - name: Run Black
-          run: black --check .
+      - name: Run Black
+        run: black --check .
 
-        - name: Run isort
-          run: isort --check-only .
+      - name: Run isort
+        run: isort --check-only .
 
-        - name: Run flake8
-          run: flake8 .
+      - name: Run flake8
+        run: flake8 .
 
-        - name: Run mdformat
-          run: mdformat . --check
+      - name: Run mdformat
+        run: mdformat . --check
 
-    type-check:
-        runs-on: ubuntu-latest
+  type-check:
+    runs-on: ubuntu-latest
 
-        steps:
-        - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-        - name: Setup Python
-          uses: actions/setup-python@v4
-          with:
-              python-version: "3.10"
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-        - name: Install Dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip install .[lint,test]
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[lint,test]
 
-        - name: Run MyPy
-          run: mypy .
+      - name: Run MyPy
+        run: mypy .
 
-    functional:
-        runs-on: ${{ matrix.os }}
+  functional:
+    runs-on: ${{ matrix.os }}
 
-        strategy:
-            matrix:
-                os: [ubuntu-latest, macos-latest]   # eventually add `windows-latest`
-                python-version: ["3.10", "3.11"]
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest] # eventually add `windows-latest`
+        python-version: ["3.9", "3.10", "3.11"]
 
-        env:
-          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # env:
+    #   GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        steps:
-        - uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-        - name: Setup Python
-          uses: actions/setup-python@v4
-          with:
-              python-version: ${{ matrix.python-version }}
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
 
-        - name: Setup Go
-          uses: actions/setup-go@v4
-          with:
-            go-version: '^1.20.7'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # pip uninstall eth-ape --yes
+          pip install .[test]
 
-        - name: Install Geth
-          uses: gacts/install-geth-tools@v1
-          with:
-            version: 1.12.2
+      - name: Run Tests
+        run: pytest
 
-        - name: Install Dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip uninstall eth-ape --yes
-            pip install .[test]
+  fuzzing:
+    runs-on: ubuntu-latest
 
-        - name: Run Tests
-          run: pytest -m "not fuzzing" -s --cov=src -n auto --dist loadgroup
+    strategy:
+      fail-fast: true
 
-    fuzzing:
-        runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
-        strategy:
-            fail-fast: true
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-        steps:
-        - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[test]
 
-        - name: Setup Python
-          uses: actions/setup-python@v4
-          with:
-              python-version: "3.10"
-
-        - name: Install Dependencies
-          run: |
-            python -m pip install --upgrade pip
-            pip install .[test]
-
-        - name: Run Tests
-          run: pytest -m "fuzzing" --no-cov -s
+      - name: Run Tests
+        run: pytest

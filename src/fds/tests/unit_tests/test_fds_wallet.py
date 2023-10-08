@@ -43,9 +43,7 @@ def test_fail_from_json_invalid(test_wallet):
         return
 
     # If no exception was raised, the test fails
-    assert (
-        False
-    ), 'Expected a ValueError with message "MAC mismatch", but no exception was raised'
+    assert False, 'Expected a ValueError with message "MAC mismatch", but no exception was raised'
 
 
 def test_encrypt(test_wallet):
