@@ -23,10 +23,11 @@ from binascii import hexlify, unhexlify
 from os import urandom
 
 from cryptography.hazmat.backends import default_backend
-# from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from eth_keys import keys
+from eth_utils import decode_hex
 
 
 class Crypto:
@@ -36,13 +37,21 @@ class Crypto:
 
     @staticmethod
     def private_to_public_key(private_key):
-        # Remove "0x" prefix if present
-        private_key = private_key.replace("0x", "")
+        # * if in str then process it directly
+        if isinstance(private_key, str):
+            private_key_hex = private_key
+        # * if in bytes then convert it to hex
+        elif isinstance(private_key, bytes):
+            private_key_hex = private_key.hex()
+        else:
+            raise TypeError("Invalid private key format. Expected str or bytes.")
 
-        if len(private_key) != 64:
+        private_key_bytes = decode_hex(private_key_hex)
+
+        if len(private_key_bytes) != 32:
             raise ValueError("Invalid private key length. Expected 64 characters.")
 
-        private_key_bytes = codecs.decode(private_key, "hex_codec")
+        # private_key_bytes = codecs.decode(private_key, "hex_codec")
 
         pk = keys.PrivateKey(private_key_bytes)
         return pk.public_key.to_hex()

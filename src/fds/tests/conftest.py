@@ -1,7 +1,13 @@
 import ape
 import pytest
 
+from fds.fds_crypto import Crypto
 from fds.fds_wallet import Wallet
+
+
+@pytest.fixture(autouse=True)
+def crypto_instance():
+    return Crypto()
 
 
 @pytest.fixture(autouse=True)
