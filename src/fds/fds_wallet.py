@@ -55,7 +55,9 @@ class Wallet:
 
     def from_json(self, wallet_json, password):
         try:
-            account = Account.decrypt(wallet_json, password)
+            private_key = Account.decrypt(wallet_json, password)
+            account = Account.from_key(private_key)
+            # print(account)
             wallet = WalletClass(
                 {
                     "address": account.address.lower(),

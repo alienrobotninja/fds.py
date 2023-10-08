@@ -22,6 +22,9 @@ def wallet_instance(test_wallet):
     return test_wallet
 
 
+# * Ape fixtures
+
+
 @pytest.fixture(autouse=True)
 def setenviron(monkeypatch):
     """
