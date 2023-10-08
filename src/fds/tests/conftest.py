@@ -1,4 +1,4 @@
-import ape
+import ape  # type: ignore
 import pytest
 
 from fds.fds_crypto import Crypto
@@ -114,11 +114,6 @@ def geth_account(test_accounts):
 @pytest.fixture
 def geth_second_account(test_accounts):
     return test_accounts[7]
-
-
-@pytest.fixture(scope="session")
-def networks():
-    return ape.networks
 
 
 @pytest.fixture

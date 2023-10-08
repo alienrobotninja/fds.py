@@ -1,6 +1,6 @@
 import json
 
-from fds.fds_wallet import Wallet
+# from fds.fds_wallet import Wallet
 
 
 def test_generate_wallet(wallet_instance):
@@ -37,7 +37,8 @@ def test_fail_from_json_invalid(test_wallet):
     # Provide an incorrect password to test decryption failure
     invalid_password = "wrong_password"
     try:
-        wallet_from_json = test_wallet.from_json(wallet_json, invalid_password)
+        # * we don't nened the wallet object for this test
+        _ = test_wallet.from_json(wallet_json, invalid_password)
     except ValueError as e:
         assert str(e) == "MAC mismatch", f"Unexpected error message: {e}"
         return
@@ -47,7 +48,7 @@ def test_fail_from_json_invalid(test_wallet):
 
 
 def test_encrypt(test_wallet):
-    private_key = "0x7cbb15a540c3954792bf3729f9b26c0242e745890332bcf2ffeaece345f9d141"  # Replace with a valid private key
+    private_key = "0x7cbb15a540c3954792bf3729f9b26c0242e745890332bcf2ffeaece345f9d141"  # noqa: E501
     password = "test_password"
 
     wallet_json = test_wallet.encrypt(private_key, password)

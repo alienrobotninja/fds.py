@@ -32,6 +32,8 @@ mdformat = ">=0.7.17"
 mdformat-gfm = ">=0.3.5"
 mdformat-frontmatter = ">=0.4.1"
 mdformat-pyproject = ">=0.0.1"
+pyproject-flake8 = "^6.1.0"
+flake8-pyproject = "^1.2.3"
 
 
 [build-system]
@@ -61,3 +63,12 @@ use_parentheses = true
 
 [tool.mdformat]
 number = true
+
+[[tool.mypy.overrides]]
+module = "eth_keys.*"
+ignore_missing_imports = true
+
+# * not working so defined in setup.cfg
+# [tool.flake8]
+# line-length = 100
+# exclude = ["__pycache__", ".venv/*"]
