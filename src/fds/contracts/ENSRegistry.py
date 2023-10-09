@@ -19,5 +19,6 @@ handles crypto
 """
 
 
-class FDSContract:
-    pass
+class ENSRegistry:
+    def __init__(self):
+        ...
