@@ -1,8 +1,17 @@
+from typing import cast
+
 import ape  # type: ignore
 import pytest
 
 from fds.fds_crypto import Crypto
 from fds.fds_wallet import Wallet
+
+TEST_CONTRACT_ADDRESS = "0x13370Df4d8fE698f2c186A18903f27e00a097331"
+
+
+@pytest.fixture(scope="session")
+def address():
+    return TEST_CONTRACT_ADDRESS
 
 
 @pytest.fixture(autouse=True)
@@ -23,6 +32,13 @@ def wallet_instance(test_wallet):
 
 
 # * Ape fixtures
+@pytest.fixture(autouse=True)
+def eth_tester_provider(ethereum):
+    if not ape.networks.active_provider or ape.networks.provider.name != "test":
+        with ethereum.local.use_provider("test") as provider:
+            yield provider
+    else:
+        yield ape.networks.provider
 
 
 @pytest.fixture(autouse=True)
@@ -136,3 +152,8 @@ def mock_provider(mock_web3, eth_tester_provider):
     eth_tester_provider._web3 = mock_web3
     yield eth_tester_provider
     eth_tester_provider._web3 = web3
+
+
+@pytest.fixture()
+def contract_instance(eth_tester_provider, solidity_contract_instance):
+    return solidity_contract_instance
