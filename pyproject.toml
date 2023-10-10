@@ -43,10 +43,12 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.project]
 name = "fds"
 
-# [tool.pytest.ini_options]
+[tool.pytest.ini_options]
 # addopts = [
 #     "--import-mode=importlib",
-# ]
+#]
+# NOTE: Prevents the ape plugin from activating on our tests
+addopts = "-p no:ape_test"
 
 
 [tool.black]
