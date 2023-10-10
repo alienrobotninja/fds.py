@@ -103,7 +103,7 @@ class FDSContract:
         self,
         account: AccountAPI = None,
     ):
-        super().__init__()
+        # super().__init__()
         self.account = account
 
     def at(
@@ -114,7 +114,7 @@ class FDSContract:
             return
         self.address = address
         self.abi = abi
-        return Contract(address=self.adddress, abi=self.abi)
+        return Contract(address=self.address, abi=self.abi)
 
     def deploy(
         self, contract: ContractContainer, *args, publish: bool = False, **kwargs

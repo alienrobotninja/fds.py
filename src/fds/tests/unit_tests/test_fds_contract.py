@@ -3,7 +3,7 @@ from ape import accounts
 from fds.fds_contract import FDSContract
 
 
-def test_load_contract_from_abi():
+def test_load_contract_from_abi(owner):
     abi = [
         {
             "inputs": [],
@@ -21,9 +21,9 @@ def test_load_contract_from_abi():
         },
     ]
 
-    address = "0xabcdababababababababababababab"
-
-    fdscontract = FDSContract()
+    account = owner
+    address = account.address
+    fdscontract = FDSContract(owner)
     loaded_contract = fdscontract.at(address=address, abi=abi)
 
     print(dir(loaded_contract))
