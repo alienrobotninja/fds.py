@@ -1,12 +1,50 @@
-from typing import cast
+from pathlib import Path
 
 import ape  # type: ignore
 import pytest
+from ape.contracts.base import ContractContainer, ContractInstance
+from ethpm_types import ContractType
 
+from fds.fds_contract import FDSContract
 from fds.fds_crypto import Crypto
 from fds.fds_wallet import Wallet
 
 TEST_CONTRACT_ADDRESS = "0x13370Df4d8fE698f2c186A18903f27e00a097331"
+PROJECT_PATH = Path(__file__).parent
+CONTRACTS_FOLDER = PROJECT_PATH / "data" / "contracts" / "abi"
+
+
+abi = [
+    {"inputs": [], "stateMutability": "nonpayable", "type": "constructor"},
+    {
+        "inputs": [],
+        "name": "count",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function",
+    },
+    {
+        "inputs": [],
+        "name": "getCount",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function",
+    },
+    {
+        "inputs": [],
+        "name": "increment",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "nonpayable",
+        "type": "function",
+    },
+    {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+        "stateMutability": "view",
+        "type": "function",
+    },
+]
 
 
 @pytest.fixture(scope="session")
@@ -137,15 +175,6 @@ def ethereum(networks):
     return networks.ethereum
 
 
-@pytest.fixture(autouse=True)
-def eth_tester_provider(ethereum):
-    if not ape.networks.active_provider or ape.networks.provider.name != "test":
-        with ethereum.local.use_provider("test") as provider:
-            yield provider
-    else:
-        yield ape.networks.provider
-
-
 @pytest.fixture
 def mock_provider(mock_web3, eth_tester_provider):
     web3 = eth_tester_provider.web3
@@ -154,6 +183,44 @@ def mock_provider(mock_web3, eth_tester_provider):
     eth_tester_provider._web3 = web3
 
 
-@pytest.fixture()
-def contract_instance(eth_tester_provider, solidity_contract_instance):
-    return solidity_contract_instance
+@pytest.fixture(scope="session")
+def get_contract_type():
+    def fn(name: str) -> ContractType:
+        return ContractType.parse_file(CONTRACTS_FOLDER / f"{name}.json")
+
+    return fn
+
+
+@pytest.fixture(scope="session")
+def solidity_contract_type(get_contract_type) -> ContractType:
+    return get_contract_type("SolidityTestContract")
+
+
+@pytest.fixture(scope="session")
+def solidity_contract_container(solidity_contract_type) -> ContractContainer:
+    return ContractContainer(contract_type=solidity_contract_type)
+
+
+@pytest.fixture
+def networks_connected_to_tester(eth_tester_provider):
+    return eth_tester_provider.network_manager
+
+
+@pytest.fixture
+def solidity_contract_instance(
+    owner, solidity_contract_container, networks_connected_to_tester
+) -> ContractInstance:
+    return owner.deploy(solidity_contract_container)
+
+
+@pytest.fixture
+def ABI():
+    return abi
+
+
+@pytest.fixture
+def fdsContractDeploy(owner):
+    fdscontract = FDSContract(owner)
+    contract = fdscontract.deploy(ape.project.SolidityTestContract)
+
+    return contract

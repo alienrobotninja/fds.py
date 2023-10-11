@@ -46,5 +46,5 @@ if __name__ == "__main__":
 
     buffer = utils.file_to_buffer("CHANGELOG.rst")
     string = utils.file_to_string("CHANGELOG.rst")
-    print(string)
-    print(buffer)
+    # print(string)
+    # print(buffer)

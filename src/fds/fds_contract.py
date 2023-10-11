@@ -18,60 +18,93 @@
     handles Contract interactions
 """
 
-from pathlib import Path
+
 # from ape.managers.chain import instance_at
-from typing import Dict, List, Optional, Union
 
-import ape
 # * ape imports
-from ape import Contract, project
+# import ape
+from ape import Contract  # , project
 from ape.api.accounts import AccountAPI
-from ape.contracts.base import ContractContainer, ContractInstance, ContractTransactionHandler
+from ape.api.transactions import ReceiptAPI, TransactionAPI
+from ape.contracts.base import ContractContainer, ContractInstance
 from ape.types import AddressType
-from ape.utils import BaseInterfaceModel
-from ethpm_types import ABI, ContractType
 
-from fds.utils.Exceptions import AccountNotFoundException, NotImplementedException
+# * Fds modules
+from fds.utils.Exceptions import AccountNotFoundException, ContractNotFoundException
+from fds.utils.types import AbiType
+
+# from ape.utils import BaseInterfaceModel
+# from ethpm_types import ABI  , ContractType
+
+# from pandas import DataFrame
+
 
 
 class FDSContract:
-    def __init__(
-        self,
-        account: AccountAPI = None,
-    ):
-        # super().__init__()
+    def __init__(self, account: AccountAPI):
         self.account = account
+        self.contract_address = None
 
-    def at(
-        self, address: AddressType, abi: Optional[Union[List[ABI], Dict, str, Path]] = None
-    ) -> ContractInstance:
+    def at(self, address: AddressType, abi: AbiType = None) -> ContractInstance:
         if not self.account:
-            raise AccountNotFoundException("Account has not been set yet")
-            return
-        self.address = address
+            raise AccountNotFoundException("Account has not been set yet.")
+
+        self.contract_address = address  # type: ignore
         self.abi = abi
-        return Contract(address=self.address, abi=self.abi)
+        self.contract = Contract(address=self.contract_address, abi=self.abi)  # type: ignore
+        return self.contract
 
     def deploy(
         self, contract: ContractContainer, *args, publish: bool = False, **kwargs
     ) -> ContractInstance:
         if not self.account:
-            raise AccountNotFoundException("Account hash not been set up yet.")
-            return
+            raise AccountNotFoundException("Account has not been set up yet.")
 
-        return self.account.deploy(contract, *args, publish, **kwargs)
+        self.contract = self.account.deploy(contract, *args, publish=publish, **kwargs)
+        self.contract_address = self.contract.address  # type: ignore
+        return self.contract
 
-    def deploy_from_abi(
+    def call(
         self,
-        address: AddressType,
-        abi: Optional[Union[List[ABI], Dict, str, Path]] = None,
-        **kwargs,
-    ) -> ContractContainer:
-        if not self.account:
-            raise AccountNotFoundException("Account has not been set yet")
-            return
-        self.address = address
-        self.abi = abi
-        self.contract = Contract(address=self.address, abi=self.abi)
+        txn: TransactionAPI,
+        send_everything: bool = False,
+        private: bool = False,
+        **signer_options,
+    ) -> ReceiptAPI:
+        """
+        Make a transaction call.
+        """
 
-        return self.account.deploy(self.contract, **kwargs)
+        if not self.contract_address or not self.contract_address == "0x":
+            raise ContractNotFoundException("Contract is not deployed yet.")
+        if not self.account:
+            raise AccountNotFoundException("Account has not been set up yet.")
+
+        return self.account.call(
+            txn=txn, send_everything=send_everything, private=private, **signer_options
+        )
+
+    # TODO: Decide whether we need this as ape has already a built in query method to get events
+    # def getPastEvents(
+    #     self,
+    #     *columns: List[str],
+    #     event_name: str,
+    #     start_block: int = 0,
+    #     stop_block: Optional[int] = None,
+    #     step: int = 1,
+    #     engine_to_use: Optional[str] = None,
+    # ) -> DataFrame:
+    #     # self.contract = contract
+    #     # print(self.contract, self.contract_address, self.contract_address)
+    #     # if not self.contract or not self.contract_address == "0x" or not self.contract_address:
+    #     #     raise ContractNotFoundException("Contract is not deployed yet.")
+
+    #     self.events = getattr(self.contract, event_name).query(
+    #         *columns,
+    #         start_block=start_block,
+    #         stop_block=stop_block,
+    #         step_block=step,
+    #         engine_to_use=engine_to_use,
+    #     )
+
+    #     return self.events

@@ -3,5 +3,6 @@
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "python.formatting.provider": "none",
-    "docwriter.progress.trackClasses": true
+    "docwriter.progress.trackClasses": true,
+    "docify.commentService.programmingLanguage": "python"
 }

@@ -4,3 +4,7 @@ class AccountNotFoundException(Exception):
 
 class NotImplementedException(Exception):
     pass
+
+
+class ContractNotFoundException(Exception):
+    pass

@@ -48,7 +48,7 @@ name = "fds"
 #     "--import-mode=importlib",
 #]
 # NOTE: Prevents the ape plugin from activating on our tests
-addopts = "-p no:ape_test"
+# addopts = "-p no:ape_test"
 
 
 [tool.black]
