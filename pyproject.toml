@@ -34,6 +34,7 @@ mdformat-frontmatter = ">=0.4.1"
 mdformat-pyproject = ">=0.0.1"
 pyproject-flake8 = "^6.1.0"
 flake8-pyproject = "^1.2.3"
+sphinx = "^7.2.6"
 
 
 [build-system]

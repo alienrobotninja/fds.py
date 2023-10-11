@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.join(__location__, "../src"))
 try:  # for Sphinx >= 1.7
     from sphinx.ext import apidoc
 except ImportError:
-    from sphinx import apidoc
+    from sphinx import apidoc  # type: ignore
 
 output_dir = os.path.join(__location__, "api")
 module_dir = os.path.join(__location__, "../src/fds_py")
@@ -87,7 +87,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "fds_py"
+project = "fds"
 copyright = "2023, SAIKAT KARMAKAR"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -99,7 +99,7 @@ copyright = "2023, SAIKAT KARMAKAR"
 # If you don’t need the separation provided between version and release,
 # just set them both to the same value.
 try:
-    from fds_py import __version__ as version
+    from fds import __version__ as version  # type: ignore
 except ImportError:
     version = ""
 
@@ -231,7 +231,7 @@ htmlhelp_basename = "fds_py-doc"
 
 # -- Options for LaTeX output ------------------------------------------------
 
-latex_elements = {
+latex_elements = {  # type: ignore
     # The paper size ("letterpaper" or "a4paper").
     # "papersize": "letterpaper",
     # The font size ("10pt", "11pt" or "12pt").
