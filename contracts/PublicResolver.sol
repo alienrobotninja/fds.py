@@ -1,13 +1,12 @@
 pragma solidity ^0.5.0;
 
-import "./ENS.sol";
+import "./interfaces/ENS.sol";
 
 /**
  * A simple resolver anyone can use; only allows the owner of a node to set its
  * address.
  */
 contract PublicResolver {
-
     bytes4 constant INTERFACE_META_ID = 0x01ffc9a7;
     bytes4 constant ADDR_INTERFACE_ID = 0x3b3b57de;
     bytes4 constant CONTENT_INTERFACE_ID = 0xd8389dc5;
@@ -35,14 +34,14 @@ contract PublicResolver {
         bytes32 content;
         string name;
         PublicKey pubkey;
-        mapping(string=>string) text;
-        mapping(uint256=>bytes) abis;
+        mapping(string => string) text;
+        mapping(uint256 => bytes) abis;
         bytes multihash;
     }
 
     ENS ens;
 
-    mapping (bytes32 => Record) records;
+    mapping(bytes32 => Record) records;
 
     modifier only_owner(bytes32 node) {
         require(ens.owner(node) == msg.sender);
@@ -58,31 +57,53 @@ contract PublicResolver {
         ens = ensAddr;
     }
 
-	/**
+    /**
      * Sets all required params in one attempt
      * May only be called by the owner of that node in the ENS registry.
      * @param node The node to update.
      * @param addr The address to set.
-	 * @param content The content hash to set
-	 * @param multihash The multihash to set
+     * @param content The content hash to set
+     * @param multihash The multihash to set
      * @param x the X coordinate of the curve point for the public key.
      * @param y the Y coordinate of the curve point for the public key.
-	 * @param name The name to set.
-    */
-    function setAll(bytes32 node, address addr, bytes32 content,  bytes memory multihash, bytes32 x, bytes32 y, string memory name) public only_owner(node) {
-		 setAddr(node, addr);
-		 setContent(node, content);
-		 setMultihash(node, multihash);
-		 setPubkey(node, x, y);
-		 setName(node, name);
+     * @param name The name to set.
+     */
+    function setAll(
+        bytes32 node,
+        address addr,
+        bytes32 content,
+        bytes memory multihash,
+        bytes32 x,
+        bytes32 y,
+        string memory name
+    ) public only_owner(node) {
+        setAddr(node, addr);
+        setContent(node, content);
+        setMultihash(node, multihash);
+        setPubkey(node, x, y);
+        setName(node, name);
     }
-	function getAll(bytes32 node) public view returns(address addr, bytes32 content, bytes memory multihash, bytes32 x, bytes32 y, string memory name) {
-		 addr = records[node].addr;
-		 content = records[node].content;
-		 multihash = records[node].multihash;
-		 x = records[node].pubkey.x;
-		 y = records[node].pubkey.y;
-		 name = records[node].name;
+
+    function getAll(
+        bytes32 node
+    )
+        public
+        view
+        returns (
+            address addr,
+            bytes32 content,
+            bytes memory multihash,
+            bytes32 x,
+            bytes32 y,
+            string memory name
+        )
+    {
+        addr = records[node].addr;
+        content = records[node].content;
+        multihash = records[node].multihash;
+        x = records[node].pubkey.x;
+        y = records[node].pubkey.y;
+        name = records[node].name;
     }
 
     /**
@@ -115,11 +136,14 @@ contract PublicResolver {
      * @param node The node to update.
      * @param hash The multihash to set
      */
-    function setMultihash(bytes32 node, bytes memory hash) public only_owner(node) {
+    function setMultihash(
+        bytes32 node,
+        bytes memory hash
+    ) public only_owner(node) {
         records[node].multihash = hash;
         emit MultihashChanged(node, hash);
     }
-    
+
     /**
      * Sets the name associated with an ENS node, for reverse records.
      * May only be called by the owner of that node in the ENS registry.
@@ -139,21 +163,29 @@ contract PublicResolver {
      * @param contentType The content type of the ABI
      * @param data The ABI data.
      */
-    function setABI(bytes32 node, uint256 contentType, bytes memory data) public only_owner(node) {
+    function setABI(
+        bytes32 node,
+        uint256 contentType,
+        bytes memory data
+    ) public only_owner(node) {
         // Content types must be powers of 2
         require(((contentType - 1) & contentType) == 0);
-        
+
         records[node].abis[contentType] = data;
         emit ABIChanged(node, contentType);
     }
-    
+
     /**
      * Sets the SECP256k1 public key associated with an ENS node.
      * @param node The ENS node to query
      * @param x the X coordinate of the curve point for the public key.
      * @param y the Y coordinate of the curve point for the public key.
      */
-    function setPubkey(bytes32 node, bytes32 x, bytes32 y) public only_owner(node) {
+    function setPubkey(
+        bytes32 node,
+        bytes32 x,
+        bytes32 y
+    ) public only_owner(node) {
         records[node].pubkey = PublicKey(x, y);
         emit PubkeyChanged(node, x, y);
     }
@@ -165,7 +197,11 @@ contract PublicResolver {
      * @param key The key to set.
      * @param value The text data value to set.
      */
-    function setText(bytes32 node, string memory key, string memory value) public only_owner(node) {
+    function setText(
+        bytes32 node,
+        string memory key,
+        string memory value
+    ) public only_owner(node) {
         records[node].text[key] = value;
         emit TextChanged(node, key, key);
     }
@@ -176,7 +212,10 @@ contract PublicResolver {
      * @param key The text data key to query.
      * @return The associated text data.
      */
-    function text(bytes32 node, string memory key) public view returns (string memory) {
+    function text(
+        bytes32 node,
+        string memory key
+    ) public view returns (string memory) {
         return records[node].text[key];
     }
 
@@ -254,13 +293,14 @@ contract PublicResolver {
      * @return True if the contract implements the requested interface.
      */
     function supportsInterface(bytes4 interfaceID) public pure returns (bool) {
-        return interfaceID == ADDR_INTERFACE_ID ||
-        interfaceID == CONTENT_INTERFACE_ID ||
-        interfaceID == NAME_INTERFACE_ID ||
-        interfaceID == ABI_INTERFACE_ID ||
-        interfaceID == PUBKEY_INTERFACE_ID ||
-        interfaceID == TEXT_INTERFACE_ID ||
-        interfaceID == MULTIHASH_INTERFACE_ID ||
-        interfaceID == INTERFACE_META_ID;
+        return
+            interfaceID == ADDR_INTERFACE_ID ||
+            interfaceID == CONTENT_INTERFACE_ID ||
+            interfaceID == NAME_INTERFACE_ID ||
+            interfaceID == ABI_INTERFACE_ID ||
+            interfaceID == PUBKEY_INTERFACE_ID ||
+            interfaceID == TEXT_INTERFACE_ID ||
+            interfaceID == MULTIHASH_INTERFACE_ID ||
+            interfaceID == INTERFACE_META_ID;
     }
 }
