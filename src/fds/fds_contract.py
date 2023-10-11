@@ -39,7 +39,6 @@ from fds.utils.types import AbiType
 # from pandas import DataFrame
 
 
-
 class FDSContract:
     def __init__(self, account: AccountAPI):
         self.account = account
