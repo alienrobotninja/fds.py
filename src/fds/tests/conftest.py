@@ -130,6 +130,11 @@ def test_accounts(accounts):
     return accounts.test_accounts
 
 
+@pytest.fixture
+def vitalik(accounts):
+    return accounts["0xab5801a7d398351b8be11c439e05c5b3259aec9b"]
+
+
 @pytest.fixture(scope="session")
 def owner(test_accounts):
     return test_accounts[0]

@@ -8,3 +8,7 @@ class NotImplementedException(Exception):
 
 class ContractNotFoundException(Exception):
     pass
+
+
+class InaccessibleGatewayException(Exception):
+    pass

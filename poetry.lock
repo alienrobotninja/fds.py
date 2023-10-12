@@ -1111,13 +1111,13 @@ test = ["coverage", "hypothesis (>=4.18.0,<5)", "pytest (>=6.2.5,<7)", "pytest-x
 
 [[package]]
 name = "eth-ape"
-version = "0.6.21"
+version = "0.6.22"
 description = "Ape Ethereum Framework"
 optional = false
 python-versions = ">=3.8,<4"
 files = [
-    {file = "eth-ape-0.6.21.tar.gz", hash = "sha256:ba1aae093fd3ee02d2b46aa3b422f35961278ca0c6951ca702c638c73ed36cf1"},
-    {file = "eth_ape-0.6.21-py3-none-any.whl", hash = "sha256:effebb12956df21fc7d6bd69197b9671c1c85a232084042dedda41c60c92cc95"},
+    {file = "eth-ape-0.6.22.tar.gz", hash = "sha256:dcadd800a532cf253111340c4bd027624fde85755993d147d0233b137a0ad99f"},
+    {file = "eth_ape-0.6.22-py3-none-any.whl", hash = "sha256:a68d9ccb0acd533662625da0247854f64e8fd6cd031f83a64b1b96a54a990881"},
 ]
 
 [package.dependencies]
@@ -1127,7 +1127,7 @@ eth-abi = ">=4.1.0,<5"
 eth-account = ">=0.8,<0.9"
 eth-typing = ">=3.4,<4"
 eth-utils = ">=2.2.0,<3"
-ethpm-types = ">=0.5.6,<0.6"
+ethpm-types = ">=0.5.8,<0.6"
 evm-trace = ">=0.1.0a23"
 hexbytes = ">=0.2.3,<1"
 ijson = ">=3.1.4,<4"
@@ -1346,13 +1346,13 @@ test = ["hypothesis (>=4.43.0)", "mypy (==0.971)", "pytest (>=7.0.0)", "pytest-x
 
 [[package]]
 name = "ethpm-types"
-version = "0.5.6"
+version = "0.5.8"
 description = "ethpm_types: Implementation of EIP-2678"
 optional = false
 python-versions = ">=3.8,<4"
 files = [
-    {file = "ethpm-types-0.5.6.tar.gz", hash = "sha256:4d8e7aaf69f605055f0c3681eaa03bab2dbc201a72d2493ef41db9aa3fcaa1ff"},
-    {file = "ethpm_types-0.5.6-py3-none-any.whl", hash = "sha256:edc64fec898349338a83d36120452467c6e64399ed0541524bbcadb736035756"},
+    {file = "ethpm-types-0.5.8.tar.gz", hash = "sha256:deaa9ec75cc8d02a047d5a2b065bd038ee6654ba2ffcf6e4c969181eacfdffc2"},
+    {file = "ethpm_types-0.5.8-py3-none-any.whl", hash = "sha256:1fcf4fd551133ec917b99406b206713f34112f5e3c030ece5dcb3e5ed8562ee3"},
 ]
 
 [package.dependencies]
@@ -1363,9 +1363,9 @@ pydantic = ">=1.10.7,<2.0.dev0 || >=2.3.dev0,<3"
 requests = ">=2.29.0,<3"
 
 [package.extras]
-dev = ["IPython", "PyGithub (>=1.54,<2.0)", "black (>=23.7.0,<24)", "commitizen (>=2.40,<2.41)", "flake8 (>=6.1.0,<7)", "flake8-breakpoint (>=1.1.0)", "flake8-print (>=4.0.0)", "hypothesis (>=6.2.0,<7.0)", "hypothesis-jsonschema (==0.19.0)", "ipdb", "isort (>=5.10.1,<5.11)", "mypy (>=1.5.1,<2)", "pre-commit", "pysha3 (>=1.0.2,<2.0.0)", "pytest (>=6.0)", "pytest-cov", "pytest-watch", "pytest-xdist", "setuptools", "twine", "types-requests", "types-setuptools", "wheel"]
+dev = ["IPython", "PyGithub (>=1.54,<2.0)", "black (>=23.9.1,<24)", "commitizen (>=2.40,<2.41)", "flake8 (>=6.1.0,<7)", "flake8-breakpoint (>=1.1.0)", "flake8-print (>=4.0.0)", "hypothesis (>=6.2.0,<7.0)", "hypothesis-jsonschema (==0.19.0)", "ipdb", "isort (>=5.10.1,<5.11)", "mypy (>=1.5.1,<2)", "pre-commit", "pysha3 (>=1.0.2,<2.0.0)", "pytest (>=6.0)", "pytest-cov", "pytest-watch", "pytest-xdist", "setuptools", "twine", "types-requests", "types-setuptools", "wheel"]
 doc = ["Sphinx (>=4.4.0,<5.0)", "myst-parser (>=0.17.0,<0.18)", "sphinx-click (>=3.1.0,<4.0)", "sphinx-rtd-theme (>=1.0.0,<2)", "sphinxcontrib-napoleon (>=0.7)"]
-lint = ["black (>=23.7.0,<24)", "flake8 (>=6.1.0,<7)", "flake8-breakpoint (>=1.1.0)", "flake8-print (>=4.0.0)", "isort (>=5.10.1,<5.11)", "mypy (>=1.5.1,<2)", "types-requests", "types-setuptools"]
+lint = ["black (>=23.9.1,<24)", "flake8 (>=6.1.0,<7)", "flake8-breakpoint (>=1.1.0)", "flake8-print (>=4.0.0)", "isort (>=5.10.1,<5.11)", "mypy (>=1.5.1,<2)", "types-requests", "types-setuptools"]
 release = ["setuptools", "twine", "wheel"]
 test = ["PyGithub (>=1.54,<2.0)", "hypothesis (>=6.2.0,<7.0)", "hypothesis-jsonschema (==0.19.0)", "pysha3 (>=1.0.2,<2.0.0)", "pytest (>=6.0)", "pytest-cov", "pytest-xdist"]
 
@@ -4627,4 +4627,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "cc22f0f307690c4be9c5ab6363f77b4fcf67ab8d7285fedaee4b0e9b09106032"
+content-hash = "1f19e0d009ad73bf6c45bdaed956180b65df1083cd8a4748f65adcc3887c4a64"

@@ -54,12 +54,12 @@ class FDSContract:
         return self.contract
 
     def deploy(
-        self, contract: ContractContainer, *args, publish: bool = False, **kwargs
+        self, _contract: ContractContainer, *args, publish: bool = False, **kwargs
     ) -> ContractInstance:
         if not self.account:
             raise AccountNotFoundException("Account has not been set up yet.")
 
-        self.contract = self.account.deploy(contract, *args, publish=publish, **kwargs)
+        self.contract = self.account.deploy(_contract, *args, publish=publish, **kwargs)
         self.contract_address = self.contract.address  # type: ignore
         return self.contract
 
