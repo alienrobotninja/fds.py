@@ -32,7 +32,7 @@ class Tx:
     ) -> ContractInstance:
         fdscontract = FDSContract(self.account)  # type: ignore
 
-        return fdscontract.deploy(contract=contract, *args, publish=publish, **kwargs)
+        return fdscontract.deploy(_contract=contract, *args, publish=publish, **kwargs)
 
     def syncNonce(self) -> int:
         """

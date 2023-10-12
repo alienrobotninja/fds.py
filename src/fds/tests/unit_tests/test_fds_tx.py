@@ -5,7 +5,7 @@ def test_get_contract(sender, owner, solidity_contract_instance, ABI):
     contract_address = solidity_contract_instance.address
 
     tx_object = Tx(owner)
-    deployed_contract = tx_object.getContract(sender, contract_address, ABI)
+    deployed_contract = tx_object.getContract(contract_address, ABI)
 
     assert deployed_contract.address == contract_address
     assert deployed_contract.balance == 0
