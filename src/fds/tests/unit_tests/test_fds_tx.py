@@ -1,3 +1,5 @@
+from ape import networks
+
 from fds.fds_tx import Tx
 
 
@@ -58,3 +60,18 @@ def test_pay(sender, receiver):
     assert receipt.data.hex() == "0x"
     # assert receipt.to == receiver.address
     assert receipt.gas_used > 0
+
+
+def test_getBalance(owner):
+    tx_object = Tx(owner)
+    tx_object.getBalance(owner.address)
+
+    assert tx_object
+
+
+def test_getBlockNumber(owner):
+    tx_object = Tx(owner)
+
+    block_number = tx_object.getBlockNumber()
+
+    assert block_number == networks.provider.get_block("latest")

@@ -32,7 +32,7 @@ class Tx:
     ) -> ContractInstance:
         fdscontract = FDSContract(self.account)  # type: ignore
 
-        return fdscontract.deploy(_contract=contract, *args, publish=publish, **kwargs)
+        return fdscontract.deploy(contract, *args, publish=publish, **kwargs)
 
     def syncNonce(self) -> int:
         """
@@ -100,7 +100,7 @@ class Tx:
 
         return receipt
 
-    def getBalace(self, address: AddressType) -> int:
+    def getBalance(self, address: AddressType) -> int:
         self.web3 = networks.provider._web3
 
         try:
