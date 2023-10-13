@@ -5,14 +5,25 @@ plugins:
   - name: foundry
   - name: infura
   - name: etherscan
-# ethereum:
-#   default_network: mainnet-fork
-#   mainnet_fork:
-#     default_provider: foundry
-#     gas_limit: auto
-#     transaction_acceptance_timeout: 180 # 3 Minutes
-#   mainnet:
-#     transaction_acceptance_timeout: 180
+ethereum:
+  default_network: mainnet-fork
+  mainnet_fork:
+    default_provider: foundry
+    gas_limit: auto
+    transaction_acceptance_timeout: 180 # 3 Minutes
+    default_transaction_type: 0
+  mainnet:
+    default_provider: alchemy
+    transaction_acceptance_timeout: 180
+# foundry:
+#   host: http://localhost:8555
+#   request_timeout: 40  # Defaults to 30
+#   fork_request_timeout: 600  # Defaults to 300
+foundry:
+  fork:
+    ethereum:
+      mainnet_fork:
+        upstream_provider: alchemy
 
 # solidity:
 #   version: 0.5.0

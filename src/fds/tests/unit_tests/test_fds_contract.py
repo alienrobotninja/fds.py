@@ -26,7 +26,7 @@ def test_deploy_contract(owner, fdsContractDeploy):
     # fdscontract = FDSContract(owner)
     # contract = fdscontract.deploy(project.SolidityTestContract)
     contract = fdsContractDeploy
-    assert contract.address == "0x274b028b03A250cA03644E6c578D81f019eE1323"
+    assert contract.address == "0xF2Df0b975c0C9eFa2f8CA0491C2d1685104d2488"
     assert contract.balance == 0
     assert contract.owner() == owner
 

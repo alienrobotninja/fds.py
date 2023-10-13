@@ -1,3 +1,22 @@
+"""
+Copyright 2023 The FairDataSociety Authors
+This file is part of the FairDataSociety library.
+
+The FairDataSociety library is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+The FairDataSociety library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with the FairDataSociety library. If not, see <http:www.gnu.org/licenses/>.
+
+handles transcations mostly
+"""
 from typing import Optional, Tuple, Union
 
 from ape import chain, networks
@@ -114,24 +133,25 @@ class Tx:
         """
         return networks.provider.get_block("latest")
 
-    def sign(
-        self, account: AddressType, message: str, key: Optional[str] = None
-    ) -> MessageSignature:
+    def sign(self, message: str, key: Optional[str] = None) -> MessageSignature:
         """
         https://eth-account.readthedocs.io/en/stable/eth_account.html#eth_account.account.Account.sign_message
         """
-        self.account = account  # type: ignore
-        self.key = key
+        # self.account = account # don't need that  # type: ignore
+        # self.key = key
         message_hash = encode_defunct(text=message)
-        if key:
-            signed_message = self.account.sign_message(message_hash, key)  # type: ignore
-            return signed_message.signature  # type: ignore
+
+        # if not key:
+        #     key = self.account._private_key
 
         signed_message = self.account.sign_message(message_hash)  # type: ignore
-        return signed_message.signature  # type: ignore
+        return signed_message  # type: ignore
 
     def recover(
-        self, message: str, signature: str, vrs: Optional[Tuple[VRS, VRS, VRS]] = None
+        self,
+        message: str,
+        signature: Optional[str] = None,
+        vrs: Optional[Tuple[VRS, VRS, VRS]] = None,
     ) -> AddressType:
         """
         https://eth-account.readthedocs.io/en/stable/eth_account.html#eth_account.account.Account.recover_message
@@ -140,6 +160,8 @@ class Tx:
         if vrs:
             signer = Account.recover_message(message_hash, vrs=vrs)
             return signer
-
-        signer = Account.recover_message(message_hash, signature=signature)
-        return signer
+        elif signature:
+            signer = Account.recover_message(message_hash, signature=signature)
+            return signer
+        else:
+            raise ValueError("Either signature or vrs values need to passed")
