@@ -12,3 +12,7 @@ class ContractNotFoundException(Exception):
 
 class InaccessibleGatewayException(Exception):
     pass
+
+
+class AccountNotSetUp(Exception):
+    pass

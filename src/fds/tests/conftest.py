@@ -235,15 +235,23 @@ def fdsContractDeploy(owner):
 
 @pytest.fixture
 def ensContract(owner):
-    contract = project.ENSRegistry.deploy(sender=owner)
+    return project.ENSRegistry.deploy(sender=owner)
+
+
+@pytest.fixture
+def ENS(owner, ensContract):
+    return EnsRegistry(owner, ensContract.address)
+
+
+@pytest.fixture
+def subDomainRegistrarContract(owner, ensContract):
+    node = 1
+    node = node.to_bytes(32, byteorder="big")
+    contract = project.SubdomainRegistrar.deploy(ensContract.address, node, sender=owner)
 
     return contract
 
 
 @pytest.fixture
-def ENS(owner, ensContract):
-    contract = ensContract
-
-    ENS = EnsRegistry(owner, contract.address)
-
-    return ENS
+def publicResolverContract(owner, ensContract):
+    return project.PublicResolver.deploy(ensContract.address, sender=owner)

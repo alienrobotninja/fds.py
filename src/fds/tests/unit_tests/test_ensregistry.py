@@ -42,7 +42,7 @@ def test_set_n_get_ttl(ENS):
     assert ENS.getTTL(0) == 420
 
 
-def test_fail_setting_ttl(owner, receiver, ensContract):
+def test_fail_setting_ttl(owner, ensContract):
     contract = ensContract
 
     ENS = EnsRegistry(owner, contract.address)
