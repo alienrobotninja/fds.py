@@ -15,10 +15,59 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with the FairDataSociety library. If not, see <http:www.gnu.org/licenses/>.
 
-handles crypto
+handles EnsRegistry contract
 """
 
+from typing import Union
 
-class ENSRegistry:
-    def __init__(self):
-        ...
+from ape import networks, project
+from ape.api.accounts import AccountAPI
+from ape.api.transactions import ReceiptAPI
+from ape.types import AddressType
+
+
+class EnsRegistry:
+    def __init__(self, account: AccountAPI, contract_address: Union[AddressType, None] = None):
+        self.account = account
+        self.contract_address = contract_address
+        self.contract = None
+        self.web3 = networks.provider._web3
+
+        if contract_address:
+            self.contract = project.ENSRegistry.at(self.contract_address)
+
+    # ? interacting with the contract methods
+    # * returns the address of the owner
+    def owner(self, node: int) -> str:
+        node = node.to_bytes(32, byteorder="big")  # type: ignore
+        self.node = f"0x{node.hex()}"  # type: ignore
+        return self.contract.owner(self.node)  # type: ignore
+
+    def setResolver(self, node: int, address: AddressType) -> ReceiptAPI:
+        node = node.to_bytes(32, byteorder="big")  # type: ignore
+        self.node = f"0x{node.hex()}"  # type: ignore
+        return self.contract.setResolver(self.node, address, sender=self.account)  # type: ignore
+
+    def getResolver(self, node: int) -> str:
+        node = node.to_bytes(32, byteorder="big")  # type: ignore
+        self.node = f"0x{node.hex()}"  # type: ignore
+        return self.contract.resolver(self.node)  # type: ignore
+
+    def setOwner(self, node: int, address: AddressType) -> ReceiptAPI:
+        node = node.to_bytes(32, byteorder="big")  # type: ignore
+        self.node = f"0x{node.hex()}"  # type: ignore
+        return self.contract.setOwner(self.node, address, sender=self.account)  # type: ignore
+
+    # * Returns the TTL of a node, and any records associated with it.
+    def getTTL(self, node: int) -> int:
+        node = node.to_bytes(32, byteorder="big")  # type: ignore
+        self.node = f"0x{node.hex()}"  # type: ignore
+        return self.contract.ttl(self.node)  # type: ignore
+
+    def setTTL(self, node: int, ttl: int) -> ReceiptAPI:
+        node = node.to_bytes(32, byteorder="big")  # type: ignore
+        self.node = f"0x{node.hex()}"  # type: ignore
+        self.ttl = ttl
+        return self.contract.setTTL(self.node, self.ttl, sender=self.account)  # type: ignore
+
+    # TODO: Add all other methods if required.

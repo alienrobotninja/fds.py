@@ -2,9 +2,11 @@ from pathlib import Path
 
 import ape  # type: ignore
 import pytest
+from ape import project
 from ape.contracts.base import ContractContainer, ContractInstance
 from ethpm_types import ContractType
 
+from fds.contracts.ENSRegistry import EnsRegistry
 from fds.fds_contract import FDSContract
 from fds.fds_crypto import Crypto
 from fds.fds_wallet import Wallet
@@ -229,3 +231,19 @@ def fdsContractDeploy(owner):
     contract = fdscontract.deploy(ape.project.SolidityTestContract)
 
     return contract
+
+
+@pytest.fixture
+def ensContract(owner):
+    contract = project.ENSRegistry.deploy(sender=owner)
+
+    return contract
+
+
+@pytest.fixture
+def ENS(owner, ensContract):
+    contract = ensContract
+
+    ENS = EnsRegistry(owner, contract.address)
+
+    return ENS

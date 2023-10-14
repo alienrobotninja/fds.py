@@ -17,3 +17,20 @@ along with the FairDataSociety library. If not, see <http:www.gnu.org/licenses/>
 
 mailbox smart contracts
 """
+
+
+from typing import Dict
+
+from ape.api.accounts import AccountAPI
+
+from fds.contracts.ENSRegistry import EnsRegistry
+
+KEY_STRING = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"  # noqa: 501
+
+
+class FDSENS2:
+    def __init__(self, account: AccountAPI, config: Dict):
+        self.account = account
+        self.config = config
+
+        self.ensRegistry = EnsRegistry(self.account, self.config.get("subdomainRegistrarAddress"))
