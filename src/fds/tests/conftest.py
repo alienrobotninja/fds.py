@@ -7,6 +7,7 @@ from ape.contracts.base import ContractContainer, ContractInstance
 from ethpm_types import ContractType
 
 from fds.contracts.ENSRegistry import EnsRegistry
+from fds.contracts.KeyValueTree import KeyValueTree
 from fds.fds_contract import FDSContract
 from fds.fds_crypto import Crypto
 from fds.fds_wallet import Wallet
@@ -247,11 +248,27 @@ def ENS(owner, ensContract):
 def subDomainRegistrarContract(owner, ensContract):
     node = 1
     node = node.to_bytes(32, byteorder="big")
-    contract = project.SubdomainRegistrar.deploy(ensContract.address, node, sender=owner)
-
-    return contract
+    return project.SubdomainRegistrar.deploy(ensContract.address, node, sender=owner)
 
 
 @pytest.fixture
 def publicResolverContract(owner, ensContract):
     return project.PublicResolver.deploy(ensContract.address, sender=owner)
+
+
+@pytest.fixture
+def multibox(owner):
+    mb = project.Multibox.deploy(sender=owner)
+    mb.init(sender=owner)
+
+    return mb
+
+
+@pytest.fixture
+def key_value_tree(owner):
+    return project.KeyValueTree.deploy(owner.address, sender=owner)
+
+
+@pytest.fixture
+def kvt(owner, key_value_tree):
+    return KeyValueTree(owner, key_value_tree.address)

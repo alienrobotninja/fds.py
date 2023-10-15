@@ -18,11 +18,35 @@ along with the FairDataSociety library. If not, see <http:www.gnu.org/licenses/>
 handles Multibox contract
 """
 
-from typing import Tuple, Union
+from typing import Union
 
-from ape import convert, networks, project
+from ape import networks, project
 from ape.api.accounts import AccountAPI
 from ape.api.transactions import ReceiptAPI
 from ape.types import AddressType
 
 from fds.utils.Exceptions import AccountNotSetUp
+
+
+class MultiBox:
+    def __init__(self, account: AccountAPI, contract_address: Union[AddressType, None] = None):
+        self.account = account
+        self.contract_address = contract_address
+        self.contract = None
+        self.web3 = networks.provider._web3
+
+        if not self.account:
+            raise AccountNotSetUp("Set up user account first")
+
+        if contract_address:
+            self.contract = project.Multibox.at(self.contract_address)
+        else:
+            return self.deploy()
+
+    def deploy(self):
+        self.contract = project.Multibox.deploy(sender=self.account)
+        # * call the createRoot method and initialise the contract
+        self.contract.init(sender=self.account)
+
+    def getRoots(self) -> ReceiptAPI:
+        return self.contract.getRoots()  # type: ignore

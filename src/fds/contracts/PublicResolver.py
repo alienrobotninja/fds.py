@@ -64,6 +64,9 @@ class PublicResolverClass:
         If this is desired behavior, use f"{x!r}" or "{!r}".format(x).
         Otherwise, decode the bytes
         """
+        if not self.account:
+            raise AccountNotSetUp("Set up user account first")
+
         self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
         self.address = address
         self.content = content.encode("utf-8")
@@ -127,7 +130,7 @@ class PublicResolverClass:
             raise AccountNotSetUp("Set up user account first")
 
         self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
-        self.hash = _hash.encode("utf-8")
+        self.hash = f"0x{_hash.encode().hex()}"
 
         return self.contract.setMultihash(self.node, self.hash, sender=self.account)  # type: ignore
 
@@ -139,4 +142,4 @@ class PublicResolverClass:
         """
         self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
 
-        return convert(self.contract.multihash(self.node), str)  # type: ignore
+        return bytes.fromhex(convert(self.contract.multihash(self.node).hex(), str)[2:]).decode("utf-8")  # type: ignore # noqa: 501
