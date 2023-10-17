@@ -39,12 +39,12 @@ class PublicResolverClass:
 
     def setAll(
         self,
-        node: int,
+        node: Union[int, bytes, str],
         address: AddressType,
         content: str,
         multihash: str,
-        x: int,
-        y: int,
+        x: Union[int, str],
+        y: Union[int, str],
         name: str,
     ) -> ReceiptAPI:
         """
@@ -67,12 +67,21 @@ class PublicResolverClass:
         if not self.account:
             raise AccountNotSetUp("Set up user account first")
 
-        self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        if isinstance(node, int):
+            self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        else:
+            self.node = node  # type: ignore
         self.address = address
         self.content = content.encode("utf-8")
         self.multihash = multihash.encode("utf-8")
-        self.x = x.to_bytes(32, byteorder="big")
-        self.y = y.to_bytes(32, byteorder="big")
+        if isinstance(x, int):
+            self.x = x.to_bytes(32, byteorder="big")
+        else:
+            self.x = x  # type: ignore
+        if isinstance(y, int):
+            self.y = y.to_bytes(32, byteorder="big")
+        else:
+            self.y = y  # type: ignore
         self.name = name
 
         return self.contract.setAll(  # type: ignore
@@ -86,12 +95,22 @@ class PublicResolverClass:
             sender=self.account,
         )
 
-    def getAll(self, node: int) -> Tuple:
-        self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
-
+    def getAll(
+        self,
+        node: Union[int, bytes, str],
+    ) -> Tuple:
+        if isinstance(node, int):
+            self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        else:
+            self.node = node  # type: ignore
         return self.contract.getAll(self.node)  # type: ignore
 
-    def setPublicKey(self, node: int, x: int, y: int) -> ReceiptAPI:
+    def setPublicKey(
+        self,
+        node: Union[int, bytes, str],
+        x: Union[int, str],
+        y: Union[int, str],
+    ) -> ReceiptAPI:
         """
         * Sets the SECP256k1 public key associated with an ENS node.
         * @param node The ENS node to query
@@ -100,14 +119,25 @@ class PublicResolverClass:
         """
         if not self.account:
             raise AccountNotSetUp("Set up user account first")
-
-        self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
-        self.x = x.to_bytes(32, byteorder="big")
-        self.y = y.to_bytes(32, byteorder="big")
+        if isinstance(node, int):
+            self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        else:
+            self.node = node  # type: ignore
+        if isinstance(x, int):
+            self.x = x.to_bytes(32, byteorder="big")
+        else:
+            self.x = x  # type: ignore
+        if isinstance(y, int):
+            self.y = y.to_bytes(32, byteorder="big")
+        else:
+            self.y = y  # type: ignore
 
         return self.contract.setPubkey(self.node, self.x, self.y, sender=self.account)  # type: ignore # noqa: 501
 
-    def getPublicKey(self, node: int) -> Tuple[int, int]:
+    def getPublicKey(
+        self,
+        node: Union[int, bytes, str],
+    ) -> Tuple[bytes, bytes]:
         """
         * Returns the SECP256k1 public key associated with an ENS node.
         * Defined in EIP 619.
@@ -115,11 +145,14 @@ class PublicResolverClass:
         * @return x, y the X and Y coordinates of the curve point for the public key.
         """
 
-        self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        if isinstance(node, int):
+            self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        else:
+            self.node = node  # type: ignore
 
         return self.contract.pubkey(self.node)  # type: ignore
 
-    def setMultiHash(self, node: int, _hash: str) -> ReceiptAPI:
+    def setMultiHash(self, node: Union[int, bytes, str], _hash: str) -> ReceiptAPI:
         """
         * Sets the multihash associated with an ENS node.
         * May only be called by the owner of that node in the ENS registry.
@@ -129,17 +162,34 @@ class PublicResolverClass:
         if not self.account:
             raise AccountNotSetUp("Set up user account first")
 
-        self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        if isinstance(node, int):
+            self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        else:
+            self.node = node  # type: ignore
         self.hash = f"0x{_hash.encode().hex()}"
 
         return self.contract.setMultihash(self.node, self.hash, sender=self.account)  # type: ignore
 
-    def getMultiHash(self, node: int) -> str:
+    def getMultiHash(
+        self,
+        node: Union[int, bytes, str],
+    ) -> str:
         """
         * Returns the multihash associated with an ENS node.
         * @param node The ENS node to query.
         * @return The associated multihash.
         """
-        self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        if isinstance(node, int):
+            self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        else:
+            self.node = node  # type: ignore
 
         return bytes.fromhex(convert(self.contract.multihash(self.node).hex(), str)[2:]).decode("utf-8")  # type: ignore # noqa: 501
+
+    def setAddr(self, node: Union[int, bytes, str], address: AddressType) -> ReceiptAPI:
+        if isinstance(node, int):
+            self.node = f"0x{node.to_bytes(32, byteorder='big').hex()}"
+        else:
+            self.node = node  # type: ignore
+
+        return self.contract.setAddr(self.node, address)  # type: ignore

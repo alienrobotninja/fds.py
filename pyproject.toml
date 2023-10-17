@@ -36,6 +36,7 @@ pyproject-flake8 = "^6.1.0"
 flake8-pyproject = "^1.2.3"
 sphinx = "^7.2.6"
 requests = "^2.31.0"
+ens-namehash = {url = "https://github.com/antonio-mendes/ens-namehash-py/archive/refs/heads/update_library.zip"}
 
 
 [build-system]

@@ -38,22 +38,27 @@ class SubdomainRegistrarContractClass:
     def getRootNode(self) -> str:
         return self.contract.rootNode()  # type: ignore
 
-    def register(self, label: int, owner_address: AddressType) -> ReceiptAPI:
+    def register(self, label: Union[int, bytes], owner_address: AddressType) -> ReceiptAPI:
         """
         Register a name that's not currently registered
         @param label The hash of the label to register.
         @param owner The address of the new owner.
         """
-
-        self.label = label.to_bytes(32, byteorder="big")
+        if isinstance(label, int):
+            self.label = label.to_bytes(32, byteorder="big")
+            self.label = f"0x{self.label.hex()}"  # type: ignore
+        else:
+            self.label = label
         self.owner_address = owner_address
-        self.label = f"0x{self.label.hex()}"  # type: ignore
 
         return self.contract.register(self.label, self.owner_address, sender=self.account)  # type: ignore # noqa: 501
 
     def getExpiryTime(self, label: int):
-        self.label = label.to_bytes(32, byteorder="big")
-        self.label = f"0x{self.label.hex()}"  # type: ignore
+        if isinstance(label, int):
+            self.label = label.to_bytes(32, byteorder="big")
+            self.label = f"0x{self.label.hex()}"  # type: ignore
+        else:
+            self.label = label
 
         expiryTime = self.contract.expiryTimes(self.label)  # type: ignore
 

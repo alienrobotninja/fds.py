@@ -10,7 +10,10 @@ from fds.contracts.ENSRegistry import EnsRegistry
 from fds.contracts.KeyValueTree import KeyValueTree
 from fds.fds_contract import FDSContract
 from fds.fds_crypto import Crypto
+from fds.fds_ens2 import FDSENS2
 from fds.fds_wallet import Wallet
+
+# from fds.utils.convert import getNameHash
 
 TEST_CONTRACT_ADDRESS = "0x13370Df4d8fE698f2c186A18903f27e00a097331"
 PROJECT_PATH = Path(__file__).parent
@@ -272,3 +275,36 @@ def key_value_tree(owner):
 @pytest.fixture
 def kvt(owner, key_value_tree):
     return KeyValueTree(owner, key_value_tree.address)
+
+
+@pytest.fixture
+def ens2Class(owner):
+    ensContract = project.ENSRegistry.deploy(sender=owner)
+
+    sub_domain = "0x0000000000000000000000000000000000000000000000000000000000000000"
+    # label = "0x0fe8b52446c828faa96a2aedf4552d9c63e5fafdad4cb525d5e65c6d713811fd"
+    # node = getNameHash(sub_domain, label)
+
+    ensContract.setSubnodeOwner(
+        "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "0x0fe8b52446c828faa96a2aedf4552d9c63e5fafdad4cb525d5e65c6d713811fd",
+        owner,
+        sender=owner,
+    )
+
+    subDomainRegistrarContract = project.SubdomainRegistrar.deploy(
+        ensContract.address, sub_domain, sender=owner
+    )
+    publicResolverContract = project.PublicResolver.deploy(ensContract.address, sender=owner)
+
+    # print(subDomainRegistrarContract.rootNode().hex())
+    # print(ensContract.owner(subDomainRegistrarContract.rootNode()))
+    config = {
+        "domain": "test.fds.eth",
+        "ensRegistryContract": ensContract.address,
+        "subdomainRegistrarAddress": subDomainRegistrarContract.address,
+        "publicResolverAddress": publicResolverContract.address,
+    }
+    ens2 = FDSENS2(owner, config)
+
+    return ens2

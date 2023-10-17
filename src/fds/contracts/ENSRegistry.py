@@ -38,35 +38,58 @@ class EnsRegistry:
 
     # ? interacting with the contract methods
     # * returns the address of the owner
-    def owner(self, node: int) -> str:
-        node = node.to_bytes(32, byteorder="big")  # type: ignore
-        self.node = f"0x{node.hex()}"  # type: ignore
+    def owner(self, node: Union[int, str, bytes]) -> str:
+        if isinstance(node, int):
+            self.node = node.to_bytes(32, byteorder="big")
+            self.node = f"0x{node.hex()}"  # type: ignore
+        else:
+            self.node = node  # type: ignore
+
         return self.contract.owner(self.node)  # type: ignore
 
-    def setResolver(self, node: int, address: AddressType) -> ReceiptAPI:
-        node = node.to_bytes(32, byteorder="big")  # type: ignore
-        self.node = f"0x{node.hex()}"  # type: ignore
+    def setResolver(self, node: Union[int, str, bytes], address: AddressType) -> ReceiptAPI:
+        if isinstance(node, int):
+            self.node = node.to_bytes(32, byteorder="big")
+            self.node = f"0x{node.hex()}"  # type: ignore
+        else:
+            self.node = node  # type: ignore
+
         return self.contract.setResolver(self.node, address, sender=self.account)  # type: ignore
 
-    def getResolver(self, node: int) -> str:
-        node = node.to_bytes(32, byteorder="big")  # type: ignore
-        self.node = f"0x{node.hex()}"  # type: ignore
+    def getResolver(self, node: Union[int, str, bytes]) -> str:
+        if isinstance(node, int):
+            self.node = node.to_bytes(32, byteorder="big")
+            self.node = f"0x{node.hex()}"  # type: ignore
+        else:
+            self.node = node  # type: ignore
+
         return self.contract.resolver(self.node)  # type: ignore
 
-    def setOwner(self, node: int, address: AddressType) -> ReceiptAPI:
-        node = node.to_bytes(32, byteorder="big")  # type: ignore
-        self.node = f"0x{node.hex()}"  # type: ignore
+    def setOwner(self, node: Union[int, str, bytes], address: AddressType) -> ReceiptAPI:
+        if isinstance(node, int):
+            self.node = node.to_bytes(32, byteorder="big")
+            self.node = f"0x{node.hex()}"  # type: ignore
+        else:
+            self.node = node  # type: ignore
+
         return self.contract.setOwner(self.node, address, sender=self.account)  # type: ignore
 
     # * Returns the TTL of a node, and any records associated with it.
-    def getTTL(self, node: int) -> int:
-        node = node.to_bytes(32, byteorder="big")  # type: ignore
-        self.node = f"0x{node.hex()}"  # type: ignore
+    def getTTL(self, node: Union[int, str, bytes]) -> int:
+        if isinstance(node, int):
+            self.node = node.to_bytes(32, byteorder="big")
+            self.node = f"0x{node.hex()}"  # type: ignore
+        else:
+            self.node = node  # type: ignore
+
         return self.contract.ttl(self.node)  # type: ignore
 
-    def setTTL(self, node: int, ttl: int) -> ReceiptAPI:
-        node = node.to_bytes(32, byteorder="big")  # type: ignore
-        self.node = f"0x{node.hex()}"  # type: ignore
+    def setTTL(self, node: Union[int, str, bytes], ttl: int) -> ReceiptAPI:
+        if isinstance(node, int):
+            self.node = node.to_bytes(32, byteorder="big")
+            self.node = f"0x{node.hex()}"  # type: ignore
+        else:
+            self.node = node  # type: ignore
         self.ttl = ttl
         return self.contract.setTTL(self.node, self.ttl, sender=self.account)  # type: ignore
 
