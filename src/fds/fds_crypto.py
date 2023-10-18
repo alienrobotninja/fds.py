@@ -21,6 +21,8 @@ import hashlib
 from binascii import hexlify, unhexlify
 from os import urandom
 
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
@@ -118,3 +120,15 @@ class Crypto:
 
         # Return the decrypted string as a utf-8 string
         return decrypted.decode("utf-8")
+
+    @staticmethod
+    def encrypt_buffer(buffer, password, iv):
+        cipher = AES.new(unhexlify(password[2:]), AES.MODE_CTR, iv=iv)
+        crypted = cipher.encrypt(pad(buffer, AES.block_size))
+        return crypted
+
+    @staticmethod
+    def decrypt_buffer(buffer, password, iv):
+        decipher = AES.new(unhexlify(password[2:]), AES.MODE_CTR, iv=iv)
+        dec = unpad(decipher.decrypt(buffer), AES.block_size)
+        return dec

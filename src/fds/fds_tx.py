@@ -17,7 +17,7 @@ along with the FairDataSociety library. If not, see <http:www.gnu.org/licenses/>
 
 handles transcations mostly
 """
-from typing import Optional, Tuple, Union
+from typing import Dict, Optional, Tuple, Union
 
 from ape import chain, networks
 from ape.api.accounts import AccountAPI
@@ -34,9 +34,10 @@ from fds.utils.types import VRS, AbiType
 
 
 class Tx:
-    def __init__(self, account: AccountAPI):
+    def __init__(self, config: Dict, account: AccountAPI):
         self.account = account
         self.contract_address = None
+        self.config = config
 
     def getContract(self, address: AddressType, abi: AbiType) -> ContractInstance:
         # self.account = account

@@ -9,3 +9,5 @@ AbiType = Optional[Union[List[ABI], Dict, str, Path]]
 # * https://eth-account.readthedocs.io/en/stable/eth_account.html\
 # * eth_account.account.Account.recover_message
 VRS = Union[str, bytes, int]
+
+BatchId = str

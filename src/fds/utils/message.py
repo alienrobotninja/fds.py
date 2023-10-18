@@ -20,7 +20,6 @@ handles
 import requests
 
 
-# TODO:
 class Message:
     def __init__(self, attrs, config, account):
         if "to" not in attrs:
@@ -44,22 +43,18 @@ class Message:
             "hash": self.hash.to_json(),
         }
 
-    def get_file(self, decrypt_progress_callback=print, download_progress_callback=print):
+    def get_file(self):
         if self.to.lower() == self.account.subdomain.lower():
-            return self.Mail.receive(
-                self.account, self, decrypt_progress_callback, download_progress_callback
-            )
+            return self.Mail.receive(self.account, self)
         elif self.from_.lower() == self.account.subdomain.lower():
-            return self.Mail.retrieve_sent(
-                self.account, self, decrypt_progress_callback, download_progress_callback
-            )
+            return self.Mail.retrieve_sent(self.account)
         else:
             raise ValueError("There was a problem...")
 
     def get_file_url(self):
         return f"{self.config['beeGateway']}/bzz/{self.hash.get('address')}"
 
-    def save_as(self, decrypt_progress_callback=print, download_progress_callback=print):
-        file = self.get_file(decrypt_progress_callback, download_progress_callback)
+    def save_as(self):
+        file = self.get_file()
         with open(file, "wb") as f:
             f.write(requests.get(self.get_file_url()).content)

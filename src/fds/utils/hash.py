@@ -19,13 +19,14 @@ handles hashes
 """
 
 import os
+from typing import Dict
 
 import requests
+from ape.api.accounts import AccountAPI
 
 
-# TODO:
 class Hash:
-    def __init__(self, attrs, account):
+    def __init__(self, config: Dict, attrs: Dict, account: AccountAPI):
         if "address" not in attrs:
             raise ValueError("address must be defined")
         if "file" not in attrs:
@@ -39,6 +40,7 @@ class Hash:
         self.iv = attrs.get("iv")
         self.meta = attrs.get("meta", {})
         self.account = account
+        self.config = config
 
     def toJSON(self):
         return {
@@ -53,31 +55,29 @@ class Hash:
             "meta": self.meta,
         }
 
-    def getFile(self, decrypt_progress_callback=print, download_progress_callback=print):
+    def getFile(self):
         # Implement your file retrieval logic here
         # You can use requests to download the file
-        url = f"{self.account.Store.config['swarmGateway']}/bzz:/{self.address}/{self.file['name']}"
+        url = f"{self.config['swarmGateway']}/bzz:/{self.address}/{self.file['name']}"
         response = requests.get(url, stream=True)
         if response.status_code == 200:
             with open(self.file["name"], "wb") as f:
                 for chunk in response.iter_content(chunk_size=1024):
                     if chunk:
                         f.write(chunk)
-                        download_progress_callback(len(chunk))
-            decrypt_progress_callback("File downloaded successfully.")
+                        print(len(chunk))  # noqa: ignore
+            print("File downloaded successfully.")  # noqa: ignore
             return self.file["name"]
         else:
             raise ValueError("Failed to download the file.")
 
-    def saveAs(self, decrypt_progress_callback=print, download_progress_callback=print):
-        file_path = self.getFile(decrypt_progress_callback, download_progress_callback)
+    def saveAs(self):
+        file_path = self.getFile()
         try:
             os.rename(file_path, self.file["name"])
-            decrypt_progress_callback(f"File renamed to {self.file['name']}.")
+            print(f"File renamed to {self.file['name']}.")  # noqa: ignore
         except Exception as e:
-            decrypt_progress_callback(f"Error renaming the file: {str(e)}")
+            print(f"Error renaming the file: {str(e)}")  # noqa: ignore
 
     def gatewayLink(self):
-        return (
-            f"{self.account.Store.config['swarmGateway']}/bzz:/{self.address}/{self.file['name']}"
-        )
+        return f"{self.config['swarmGateway']}/bzz:/{self.address}/{self.file['name']}"
